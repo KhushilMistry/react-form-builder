@@ -1,0 +1,28 @@
+.form-viewer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.validation-errors {
+  background-color: #fff3f3;
+  border: 1px solid #ffcdd2;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  color: #d32f2f;
+  margin-bottom: 8px;
+}
+
+.error-message:last-child {
+  margin-bottom: 0;
+}
+
+.form-title {
+  margin-bottom: 24px;
+  font-size: 24px;
+  color: #333;
+}

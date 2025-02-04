@@ -1,0 +1,11 @@
+.field-label {
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 4px;
+  margin-bottom: 4px; 
+}
+
+.inline-field-label {
+  font-weight: bold;
+  font-size: 16px;
+}

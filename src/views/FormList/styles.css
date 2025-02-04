@@ -1,0 +1,72 @@
+.form-list {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.forms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.form-info {
+  flex: 1;
+}
+
+.form-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.form-details {
+  display: flex;
+  gap: 16px;
+  color: #666;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.form-actions button {
+  white-space: nowrap;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+}
+
+.empty-state h2 {
+  margin-bottom: 20px;
+  color: #666;
+}
