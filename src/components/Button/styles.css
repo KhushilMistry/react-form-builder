@@ -1,0 +1,18 @@
+.danger-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.danger-button:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.secondary-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.secondary-button:hover {
+  background-color: #0056b3;
+}

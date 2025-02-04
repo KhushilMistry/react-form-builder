@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {FormData} from "../FormViewer/types";
 import "./styles.css";
+import {Button} from "../../components/Button";
 
 const FormList = () => {
   const [forms, setForms] = useState<FormData[]>([]);
@@ -43,7 +44,11 @@ const FormList = () => {
     <div className="form-list">
       <div className="header">
         <h2>{"Your Forms"}</h2>
-        <button onClick={navigateToNewForm}>{"Create New Form"}</button>
+        <Button
+          onClick={navigateToNewForm}
+          label="Create New Form"
+          variant="secondary"
+        />
       </div>
 
       <div className="forms-list">
@@ -60,18 +65,19 @@ const FormList = () => {
             </div>
 
             <div className="form-actions">
-              <button onClick={() => navigateToViewer(form.id)}>
-                View Form
-              </button>
-              <button onClick={() => navigateToEditor(form.id)}>
-                Edit Form
-              </button>
-              <button
-                className="delete-button"
+              <Button
+                onClick={() => navigateToViewer(form.id)}
+                label="View Form"
+              />
+              <Button
+                onClick={() => navigateToEditor(form.id)}
+                label="Edit Form"
+              />
+              <Button
                 onClick={() => handleDelete(form.id)}
-              >
-                Delete
-              </button>
+                label="Delete"
+                variant="danger"
+              />
             </div>
           </div>
         ))}

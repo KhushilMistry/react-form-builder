@@ -2,6 +2,7 @@ import {Field, FormProvider, FormRef} from "../../../../components/Form";
 import {Question} from "./types";
 import "./styles.css";
 import {forwardRef, useCallback, useMemo} from "react";
+import {Button} from "../../../../components/Button";
 
 interface QuestionEditorProps {
   question: Question;
@@ -67,7 +68,7 @@ const QuestionEditor = forwardRef<FormRef, QuestionEditorProps>(
     return (
       <div className="question-editor">
         <div className="question-header">
-          <button onClick={handleDelete}>Delete</button>
+          <Button onClick={handleDelete} label="Delete" variant="danger" />
         </div>
 
         <FormProvider

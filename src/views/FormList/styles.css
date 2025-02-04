@@ -9,6 +9,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  margin-left: 16px;
 }
 
 .forms-list {
@@ -49,16 +50,6 @@
 
 .form-actions button {
   white-space: nowrap;
-}
-
-.delete-button {
-  background-color: #dc3545;
-  color: white;
-}
-
-.delete-button:hover {
-  background-color: #c82333;
-  border-color: #bd2130;
 }
 
 .empty-state {

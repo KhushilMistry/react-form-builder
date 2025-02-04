@@ -1,6 +1,7 @@
 import QuestionEditor from "./components/QuestionEditor";
 import "./styles.css";
 import {useFormBuilder} from "./hooks/useFormBuilder";
+import {Button} from "../../components/Button";
 
 const FormBuilder = () => {
   const {
@@ -38,8 +39,16 @@ const FormBuilder = () => {
       </div>
 
       <div className="actions">
-        <button onClick={addQuestion}>Add Question</button>
-        <button onClick={handleSaveForm}>Save Form</button>
+        <Button
+          onClick={addQuestion}
+          label="Add Question"
+          variant="secondary"
+        />
+        <Button
+          onClick={handleSaveForm}
+          label="Save Form"
+          variant="secondary"
+        />
       </div>
 
       <div className="footer-note">{footerNote}</div>
