@@ -10,11 +10,3 @@
   justify-content: end;
   margin-bottom: 16px;
 }
-
-.question-header button {
-  color: red;
-}
-
-.question-header button:hover {
-  border-color: red;
-}
