@@ -5,9 +5,12 @@ import {FormData} from "./types";
 import "./styles.css";
 import {Button} from "../../components/Button";
 
+const SUCCESS_NOTE = "Changes Saved, Redirecting...";
+
 const FormViewer = () => {
   const [searchParams] = useSearchParams();
   const [form, setForm] = useState<FormData | null>(null);
+  const [footerNote, setFooterNote] = useState("");
   const formRef = useRef<FormRef>(null);
   const navigate = useNavigate();
 
@@ -28,7 +31,8 @@ const FormViewer = () => {
 
   const onSubmitClick = useCallback(() => {
     if (formRef.current?.submitForm()) {
-      navigate("/");
+      setFooterNote(SUCCESS_NOTE);
+      setTimeout(() => navigate("/"), 1000);
     }
   }, [navigate]);
 
@@ -55,6 +59,8 @@ const FormViewer = () => {
       />
 
       <Button onClick={onSubmitClick} label="Submit Form" variant="secondary" />
+
+      <div className="footer-note">{footerNote}</div>
     </div>
   );
 };
