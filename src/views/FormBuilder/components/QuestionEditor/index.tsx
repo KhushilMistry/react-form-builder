@@ -46,7 +46,7 @@ const QuestionEditor = forwardRef<FormRef, QuestionEditorProps>(
       () => ({
         title: question.title,
         type: question.type,
-        description: question.description,
+        description: question.description || "",
         required: question.required,
         options: question.options || [],
       }),

@@ -1,11 +1,11 @@
 import {ChangeEvent, useCallback} from "react";
-import {Field} from "../../../../types";
+import {Field, FormValues} from "../../../../types";
 import {useForm} from "../../../../useFormContext";
 import {errorStyles} from "../../const";
 import {Label} from "../Label";
 
 export const TextField: React.FC<{field: Field}> = ({field}) => {
-  const {values, errors, handleChange, handleBlur} = useForm();
+  const {values, errors, handleChange, handleBlur} = useForm<FormValues>();
   const hasError = !!errors[field.name];
 
   const onChange = useCallback(

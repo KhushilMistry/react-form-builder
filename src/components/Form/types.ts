@@ -22,18 +22,26 @@ export type Field = {
   options?: SelectOption[];
   customRederer?: React.FC<{
     field: Field;
-    values: Record<string, unknown>;
-    handleChange: (name: string, value: unknown) => void;
+    values: FormValues;
+    handleChange: <K extends keyof FormValues>(
+      name: K,
+      value: FormValues[K]
+    ) => void;
   }>;
 };
 
-export type FormProps = {
+export type FormValues = Record<
+  string,
+  string | number | boolean | SelectOption[]
+>;
+
+export type FormProps<T extends FormValues = FormValues> = {
   formName: string;
   fields: Field[];
-  initialValues?: Record<string, unknown>;
-  validate?: (values: Record<string, unknown>) => Record<string, string> | null;
-  onSubmit?: (values: Record<string, unknown>) => void;
-  onChange?: (values: Record<string, unknown>) => void;
+  initialValues?: T;
+  validate?: (values: T) => Record<string, string> | null;
+  onSubmit?: (values: T) => void;
+  onChange?: (values: T) => void;
   validateOnBlur?: boolean;
   validateOnChange?: boolean;
   autoSave?: boolean;
@@ -41,11 +49,11 @@ export type FormProps = {
   focusErrorOnSubmit?: boolean;
 };
 
-export type FormContextType = {
-  values: Record<string, unknown>;
+export type FormContextType<T extends FormValues = FormValues> = {
+  values: T;
   errors: Record<string, string>;
-  handleChange: (name: string, value: unknown) => void;
-  handleBlur: (name: string) => void;
+  handleChange: <K extends keyof T>(name: K, value: T[K]) => void;
+  handleBlur: (name: keyof T) => void;
 };
 
 export type FormRef = {

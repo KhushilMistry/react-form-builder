@@ -1,5 +1,5 @@
 import {useState, useCallback, useRef, useEffect} from "react";
-import {Field, SelectOption} from "../../../../types";
+import {Field, FormValues, SelectOption} from "../../../../types";
 import "./styles.css";
 import {useForm} from "../../../../useFormContext";
 import {IoChevronDownOutline} from "react-icons/io5";
@@ -7,7 +7,7 @@ import {Label} from "../Label";
 import {errorStyles} from "../../const";
 
 export const SelectField: React.FC<{field: Field}> = ({field}) => {
-  const {handleChange, errors, values} = useForm();
+  const {handleChange, errors, values} = useForm<FormValues>();
   const [isOpen, setIsOpen] = useState(false);
   const hasError = !!errors[field.name];
   const dropdownRef = useRef<HTMLDivElement>(null);

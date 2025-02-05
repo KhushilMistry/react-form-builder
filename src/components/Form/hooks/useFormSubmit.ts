@@ -1,15 +1,15 @@
 import {useCallback, useEffect, useState} from "react";
-import {FormProps} from "../types";
+import {FormProps, FormValues} from "../types";
 
-export const useFormSubmit = (props: FormProps) => {
+export const useFormSubmit = <T extends FormValues>(props: FormProps<T>) => {
   const {
-    initialValues = {},
+    initialValues = {} as T,
     onChange,
     autoSave,
     debounceMs = 300,
     fields,
     onSubmit,
-    focusErrorOnSubmit = true,
+    focusErrorOnSubmit = false,
     validate,
     validateOnBlur = true,
     validateOnChange = true,
@@ -30,15 +30,15 @@ export const useFormSubmit = (props: FormProps) => {
   }, []);
 
   const validateFields = useCallback(
-    (
-      currentValues: Record<string, unknown> = values,
-      forceValidateAll = false
-    ) => {
+    (currentValues: T = values, forceValidateAll = false) => {
       const validationErrors: Record<string, string> = {};
 
       fields.forEach((field) => {
         if (field.required && (forceValidateAll || touched[field.name])) {
-          if (!currentValues[field.name]) {
+          if (
+            currentValues[field.name] == null ||
+            currentValues[field.name] === ""
+          ) {
             validationErrors[field.name] = `${
               field.label || field.name
             } is required`;
@@ -62,7 +62,7 @@ export const useFormSubmit = (props: FormProps) => {
   );
 
   const handleChange = useCallback(
-    (name: string, value: unknown) => {
+    <K extends keyof T>(name: K, value: T[K]) => {
       setValues((prev) => {
         const updatedValues = {...prev, [name]: value};
 
@@ -77,7 +77,7 @@ export const useFormSubmit = (props: FormProps) => {
         return updatedValues;
       });
 
-      markAsTouched(name);
+      markAsTouched(name as string);
     },
     [autoSave, markAsTouched, onChange, validateFields, validateOnChange]
   );
