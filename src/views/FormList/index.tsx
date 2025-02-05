@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import {useNavigate} from "react-router-dom";
 import {FormData} from "../FormViewer/types";
 import "./styles.css";
@@ -13,29 +13,42 @@ const FormList = () => {
     setForms(storedForms);
   }, []);
 
-  const handleDelete = (formId: string) => {
-    const updatedForms = forms.filter((form) => form.id !== formId);
-    localStorage.setItem("forms", JSON.stringify(updatedForms));
-    setForms(updatedForms);
-  };
+  const handleDelete = useCallback(
+    (formId: string) => {
+      const updatedForms = forms.filter((form) => form.id !== formId);
+      localStorage.setItem("forms", JSON.stringify(updatedForms));
+      setForms(updatedForms);
+    },
+    [forms]
+  );
 
-  const navigateToViewer = (formId: string) => {
-    navigate(`/view?id=${formId}`);
-  };
+  const navigateToViewer = useCallback(
+    (formId: string) => {
+      navigate(`/view?id=${formId}`);
+    },
+    [navigate]
+  );
 
-  const navigateToEditor = (formId: string) => {
-    navigate(`/build?id=${formId}`);
-  };
+  const navigateToEditor = useCallback(
+    (formId: string) => {
+      navigate(`/build?id=${formId}`);
+    },
+    [navigate]
+  );
 
-  const navigateToNewForm = () => {
+  const navigateToNewForm = useCallback(() => {
     navigate("/build");
-  };
+  }, [navigate]);
 
   if (forms.length === 0) {
     return (
       <div className="form-list empty-state">
         <h2>{"No forms created yet"}</h2>
-        <button onClick={navigateToNewForm}>Create New Form</button>
+        <Button
+          onClick={navigateToNewForm}
+          label="Create New Form"
+          variant="secondary"
+        />
       </div>
     );
   }
@@ -65,14 +78,8 @@ const FormList = () => {
             </div>
 
             <div className="form-actions">
-              <Button
-                onClick={() => navigateToViewer(form.id)}
-                label="View Form"
-              />
-              <Button
-                onClick={() => navigateToEditor(form.id)}
-                label="Edit Form"
-              />
+              <Button onClick={() => navigateToViewer(form.id)} label="View" />
+              <Button onClick={() => navigateToEditor(form.id)} label="Edit" />
               <Button
                 onClick={() => handleDelete(form.id)}
                 label="Delete"

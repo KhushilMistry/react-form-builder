@@ -1,8 +1,9 @@
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect, useRef, useCallback} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {FormProvider, FormRef} from "../../components/Form";
 import {FormData} from "./types";
 import "./styles.css";
+import {Button} from "../../components/Button";
 
 const FormViewer = () => {
   const [searchParams] = useSearchParams();
@@ -21,19 +22,19 @@ const FormViewer = () => {
     }
   }, [searchParams]);
 
-  if (!form) {
-    return <div className="form-viewer">{"Form not found"}</div>;
-  }
-
-  const handleSubmit = (values: Record<string, unknown>) => {
+  const handleSubmit = useCallback((values: Record<string, unknown>) => {
     console.log(values);
-  };
+  }, []);
 
-  const onSubmitClick = () => {
+  const onSubmitClick = useCallback(() => {
     if (formRef.current?.submitForm()) {
       navigate("/");
     }
-  };
+  }, [navigate]);
+
+  if (!form) {
+    return <div className="form-viewer">{"Form not found"}</div>;
+  }
 
   return (
     <div className="form-viewer">
@@ -53,9 +54,7 @@ const FormViewer = () => {
         onSubmit={handleSubmit}
       />
 
-      <button type="button" className="submit-button" onClick={onSubmitClick}>
-        {"Submit Form"}
-      </button>
+      <Button onClick={onSubmitClick} label="Submit Form" variant="secondary" />
     </div>
   );
 };

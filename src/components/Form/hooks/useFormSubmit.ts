@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {FormProps} from "../types";
 
 export const useFormSubmit = (props: FormProps) => {
   const {
     initialValues = {},
-    autoSave,
     onChange,
+    autoSave,
     debounceMs = 300,
     fields,
     onSubmit,
@@ -25,62 +25,75 @@ export const useFormSubmit = (props: FormProps) => {
     }
   }, [values, autoSave, debounceMs, onChange]);
 
-  const markAsTouched = (name: string) => {
+  const markAsTouched = useCallback((name: string) => {
     setTouched((prev) => ({...prev, [name]: true}));
-  };
+  }, []);
 
-  const validateFields = (
-    currentValues: Record<string, unknown> = values,
-    forceValidateAll = false
-  ) => {
-    const validationErrors: Record<string, string> = {};
+  const validateFields = useCallback(
+    (
+      currentValues: Record<string, unknown> = values,
+      forceValidateAll = false
+    ) => {
+      const validationErrors: Record<string, string> = {};
 
-    fields.forEach((field) => {
-      if (field.required && (forceValidateAll || touched[field.name])) {
-        if (!currentValues[field.name]) {
-          validationErrors[field.name] = `${
-            field.label || field.name
-          } is required`;
+      fields.forEach((field) => {
+        if (field.required && (forceValidateAll || touched[field.name])) {
+          if (!currentValues[field.name]) {
+            validationErrors[field.name] = `${
+              field.label || field.name
+            } is required`;
+          }
+        }
+      });
+
+      if (validate) {
+        const customErrors = validate(currentValues) || {};
+        for (const key in customErrors) {
+          if (forceValidateAll || touched[key]) {
+            validationErrors[key] = customErrors[key];
+          }
         }
       }
-    });
 
-    if (validate) {
-      const customErrors = validate(currentValues) || {};
-      for (const key in customErrors) {
-        if (forceValidateAll || touched[key]) {
-          validationErrors[key] = customErrors[key];
+      setErrors(validationErrors);
+      return validationErrors;
+    },
+    [fields, touched, validate, values]
+  );
+
+  const handleChange = useCallback(
+    (name: string, value: unknown) => {
+      setValues((prev) => {
+        const updatedValues = {...prev, [name]: value};
+
+        if (validateOnChange) {
+          validateFields(updatedValues);
         }
+
+        if (!autoSave) {
+          onChange?.(updatedValues);
+        }
+
+        return updatedValues;
+      });
+
+      markAsTouched(name);
+    },
+    [autoSave, markAsTouched, onChange, validateFields, validateOnChange]
+  );
+
+  const handleBlur = useCallback(
+    (name: string) => {
+      markAsTouched(name);
+
+      if (validateOnBlur) {
+        validateFields();
       }
-    }
+    },
+    [markAsTouched, validateFields, validateOnBlur]
+  );
 
-    setErrors(validationErrors);
-    return validationErrors;
-  };
-
-  const handleChange = (name: string, value: unknown) => {
-    setValues((prev) => {
-      const updatedValues = {...prev, [name]: value};
-
-      if (validateOnChange) {
-        validateFields(updatedValues);
-      }
-
-      return updatedValues;
-    });
-
-    markAsTouched(name);
-  };
-
-  const handleBlur = (name: string) => {
-    markAsTouched(name);
-
-    if (validateOnBlur) {
-      validateFields();
-    }
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     setTouched(
       fields.reduce((acc, field) => ({...acc, [field.name]: true}), {})
     );
@@ -98,7 +111,7 @@ export const useFormSubmit = (props: FormProps) => {
     onSubmit?.(values);
 
     return true;
-  };
+  }, [fields, focusErrorOnSubmit, onSubmit, validateFields, values]);
 
   return {handleSubmit, handleBlur, handleChange, errors, values};
 };

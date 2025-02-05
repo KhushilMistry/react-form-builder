@@ -14,7 +14,7 @@ export const Label: React.FC<{field: Field; inlineLabel?: boolean}> = ({
       htmlFor={field.name}
       className={inlineLabel ? "inline-field-label" : "field-label"}
     >
-      {field.label} {field.required && <span style={{color: "red"}}>*</span>}
+      {field.label} {field.required && <span className="field-require">*</span>}
     </label>
   );
 };

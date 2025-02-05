@@ -1,7 +1,7 @@
 import QuestionEditor from "./components/QuestionEditor";
-import "./styles.css";
 import {useFormBuilder} from "./hooks/useFormBuilder";
 import {Button} from "../../components/Button";
+import "./styles.css";
 
 const FormBuilder = () => {
   const {
@@ -13,6 +13,7 @@ const FormBuilder = () => {
     questions,
     formName,
     setFormName,
+    setQuestionRef,
   } = useFormBuilder();
 
   return (
@@ -20,7 +21,7 @@ const FormBuilder = () => {
       <div className="form-name-input">
         <input
           type="text"
-          placeholder="Enter form name"
+          placeholder="Enter Form Name"
           value={formName}
           onChange={(e) => setFormName(e.target.value)}
           className="form-name-field"
@@ -34,6 +35,7 @@ const FormBuilder = () => {
             question={question}
             onUpdate={updateQuestion}
             onDelete={deleteQuestion}
+            ref={(ref) => setQuestionRef(question.id, ref)}
           />
         ))}
       </div>

@@ -4,7 +4,8 @@ export type FieldType =
   | "date"
   | "select"
   | "multi-select"
-  | "switch";
+  | "switch"
+  | "custom";
 
 export type SelectOption = {
   value: string;
@@ -19,6 +20,11 @@ export type Field = {
   description?: string;
   type: FieldType;
   options?: SelectOption[];
+  customRederer?: React.FC<{
+    field: Field;
+    values: Record<string, unknown>;
+    handleChange: (name: string, value: unknown) => void;
+  }>;
 };
 
 export type FormProps = {

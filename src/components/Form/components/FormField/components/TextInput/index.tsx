@@ -1,3 +1,4 @@
+import {ChangeEvent, useCallback} from "react";
 import {Field} from "../../../../types";
 import {useForm} from "../../../../useFormContext";
 import {errorStyles} from "../../const";
@@ -6,6 +7,17 @@ import {Label} from "../Label";
 export const TextField: React.FC<{field: Field}> = ({field}) => {
   const {values, errors, handleChange, handleBlur} = useForm();
   const hasError = !!errors[field.name];
+
+  const onChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) =>
+      handleChange(field.name, e.target.value),
+    [field.name, handleChange]
+  );
+
+  const onBlur = useCallback(
+    () => handleBlur(field.name),
+    [field.name, handleBlur]
+  );
 
   return (
     <>
@@ -17,9 +29,10 @@ export const TextField: React.FC<{field: Field}> = ({field}) => {
         value={(values[field.name] as string) || ""}
         disabled={field.disabled}
         required={field.required}
-        onChange={(e) => handleChange(field.name, e.target.value)}
-        onBlur={() => handleBlur(field.name)}
+        onChange={onChange}
+        onBlur={onBlur}
         style={errorStyles(hasError)}
+        placeholder={field.label}
       />
     </>
   );

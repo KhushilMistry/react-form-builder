@@ -1,12 +1,12 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {FormRef} from "../../../components/Form/types";
 import {Question} from "../components/QuestionEditor/types";
 import {FormData} from "../../FormViewer/types";
 import {v4 as uuidv4} from "uuid";
 
-const DEFAULT_NOTE = "New changes added, Save to update the form";
-const SUCCESS_NOTE = "Changes Saved";
+const SUCCESS_NOTE = "Changes Saved, Redirecting...";
+const CHANGE_NOTE = "New Changes Added, Save the form to update";
 
 export const useFormBuilder = () => {
   const [searchParams] = useSearchParams();
@@ -16,6 +16,12 @@ export const useFormBuilder = () => {
   const [formId, setFormId] = useState<string | null>(null);
   const [footerNote, setFooterNote] = useState("");
   const questionRefs = useRef<Record<string, FormRef>>({});
+
+  const setQuestionRef = useCallback((id: string, ref: FormRef | null) => {
+    if (ref) {
+      questionRefs.current[id] = ref;
+    }
+  }, []);
 
   useEffect(() => {
     const id = searchParams.get("id");
@@ -32,8 +38,7 @@ export const useFormBuilder = () => {
     }
   }, [formId, searchParams]);
 
-  const addQuestion = () => {
-    setFooterNote(DEFAULT_NOTE);
+  const addQuestion = useCallback(() => {
     const newQuestion: Question = {
       id: uuidv4(),
       title: "",
@@ -41,28 +46,33 @@ export const useFormBuilder = () => {
       required: false,
     };
     setQuestions([...questions, newQuestion]);
-  };
+    setFooterNote(CHANGE_NOTE);
+  }, [questions]);
 
-  const updateQuestion = (updatedQuestion: Question) => {
-    setFooterNote(DEFAULT_NOTE);
-    setQuestions(
-      questions.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
+  const updateQuestion = useCallback((updatedQuestion: Question) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.map((q) =>
+        q.id === updatedQuestion.id ? updatedQuestion : q
+      )
     );
-  };
+    setFooterNote(CHANGE_NOTE);
+  }, []);
 
-  const deleteQuestion = (questionId: string) => {
-    setFooterNote(DEFAULT_NOTE);
-    setQuestions(questions.filter((q) => q.id !== questionId));
-  };
+  const deleteQuestion = useCallback(
+    (questionId: string) => {
+      setQuestions(questions.filter((q) => q.id !== questionId));
+      setFooterNote(CHANGE_NOTE);
+    },
+    [questions]
+  );
 
-  const validateAllQuestions = (): boolean => {
+  const validateAllQuestions = useCallback(() => {
     let isValid = true;
 
     if (questions.length === 0) {
       isValid = false;
     }
 
-    // Validate each question editor
     questions.forEach((question) => {
       const questionRef = questionRefs.current[question.id];
       if (questionRef) {
@@ -74,17 +84,17 @@ export const useFormBuilder = () => {
     });
 
     return isValid;
-  };
+  }, [questions]);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback(() => {
     if (!formName.trim()) {
       setFooterNote("Form name is required");
       return false;
     }
     return validateAllQuestions();
-  };
+  }, [formName, validateAllQuestions]);
 
-  const handleSaveForm = () => {
+  const handleSaveForm = useCallback(() => {
     if (validateForm()) {
       const forms: FormData[] = JSON.parse(
         localStorage.getItem("forms") || "[]"
@@ -104,9 +114,9 @@ export const useFormBuilder = () => {
       }
 
       setFooterNote(SUCCESS_NOTE);
-      navigate(`/view?id=${formData.id}`);
+      setTimeout(() => navigate(`/view?id=${formData.id}`), 1000);
     }
-  };
+  }, [formId, formName, navigate, questions, validateForm]);
 
   return {
     handleSaveForm,
@@ -117,5 +127,6 @@ export const useFormBuilder = () => {
     questions,
     formName,
     setFormName,
+    setQuestionRef,
   };
 };
