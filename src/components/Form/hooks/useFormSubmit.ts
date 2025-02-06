@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useRef, useState} from "react";
 import {FormProps, FormValues} from "../types";
 
 export const useFormSubmit = <T extends FormValues>(props: FormProps<T>) => {
@@ -14,16 +14,12 @@ export const useFormSubmit = <T extends FormValues>(props: FormProps<T>) => {
     validateOnBlur = true,
     validateOnChange = true,
   } = props;
+
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  useEffect(() => {
-    if (autoSave && onChange) {
-      const handler = setTimeout(() => onChange(values), debounceMs);
-      return () => clearTimeout(handler);
-    }
-  }, [values, autoSave, debounceMs, onChange]);
+  const debounceRef = useRef<number | null>(null);
 
   const markAsTouched = useCallback((name: string) => {
     setTouched((prev) => ({...prev, [name]: true}));
@@ -70,16 +66,29 @@ export const useFormSubmit = <T extends FormValues>(props: FormProps<T>) => {
           validateFields(updatedValues);
         }
 
-        if (!autoSave) {
-          onChange?.(updatedValues);
+        markAsTouched(name as string);
+
+        if (autoSave && onChange) {
+          if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+          }
+
+          debounceRef.current = setTimeout(() => {
+            onChange(updatedValues);
+          }, debounceMs);
         }
 
         return updatedValues;
       });
-
-      markAsTouched(name as string);
     },
-    [autoSave, markAsTouched, onChange, validateFields, validateOnChange]
+    [
+      autoSave,
+      debounceMs,
+      markAsTouched,
+      onChange,
+      validateFields,
+      validateOnChange,
+    ]
   );
 
   const handleBlur = useCallback(

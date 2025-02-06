@@ -136,6 +136,7 @@ const QuestionEditor = forwardRef<FormRef, QuestionEditorProps>(
             onChange={handleChange}
             debounceMs={300}
             validate={validate}
+            autoSave
           />
         </div>
       </div>
