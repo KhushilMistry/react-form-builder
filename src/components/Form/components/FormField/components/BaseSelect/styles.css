@@ -1,0 +1,34 @@
+.select-container {
+  position: relative;
+  width: 100%;
+}
+
+.select-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.select-box:hover {
+  border-color: #007bff;
+}
+
+.placeholder {
+  color: #666;
+  font-size: 14px;
+}
+
+.chevron-icon {
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.chevron-icon.open {
+  transform: rotate(180deg);
+}

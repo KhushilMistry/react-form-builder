@@ -26,8 +26,8 @@ export const FormField: React.FC<{field: Field}> = ({field}) => {
   return Component ? (
     <div className="form-field">
       <Component field={field} />
-      <ErrorMessage message={errors[field.name]} />
       <DescMessage message={field.description} />
+      <ErrorMessage message={errors[field.name]} />
     </div>
   ) : null;
 };

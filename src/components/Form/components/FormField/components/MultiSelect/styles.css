@@ -1,31 +1,3 @@
-.multi-select {
-  position: relative;
-  width: 100%;
-}
-
-.select-box {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 8px;
-  background-color: white;
-  cursor: pointer;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  transition: all 0.2s ease;
-  align-items: center;
-}
-
-.select-box:hover {
-  border-color: #007bff;
-}
-
-.selected-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
 .tag {
   background-color: #f0f7ff;
   border: 1px solid #007bff;
@@ -57,49 +29,8 @@
   outline: none;
 }
 
-.chevron-icon {
-  margin-left: auto;
-  color: #666;
-  transition: transform 0.2s ease;
-}
-
-.chevron-icon.open {
-  transform: rotate(180deg);
-}
-
-.placeholder {
-  color: #666;
-}
-
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-top: 4px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 0px;
-}
-
-.dropdown-item {
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  list-style: none;
-  margin: 8px;
-}
-
-.dropdown-item:hover {
-  background-color: #f0f7ff;
-}
-
-.dropdown-item.selected {
-  background-color: #e6f0ff;
-  color: #007bff;
+.selected-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
