@@ -44,7 +44,6 @@ export type FormProps<T extends FormValues = FormValues> = {
   onChange?: (values: T) => void;
   validateOnBlur?: boolean;
   validateOnChange?: boolean;
-  autoSave?: boolean;
   debounceMs?: number;
   focusErrorOnSubmit?: boolean;
 };

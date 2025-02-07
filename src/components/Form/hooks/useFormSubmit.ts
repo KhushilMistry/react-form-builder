@@ -5,7 +5,6 @@ export const useFormSubmit = <T extends FormValues>(props: FormProps<T>) => {
   const {
     initialValues = {} as T,
     onChange,
-    autoSave,
     debounceMs = 300,
     fields,
     onSubmit,
@@ -68,7 +67,7 @@ export const useFormSubmit = <T extends FormValues>(props: FormProps<T>) => {
 
         markAsTouched(name as string);
 
-        if (autoSave && onChange) {
+        if (onChange) {
           if (debounceRef.current) {
             clearTimeout(debounceRef.current);
           }
@@ -81,14 +80,7 @@ export const useFormSubmit = <T extends FormValues>(props: FormProps<T>) => {
         return updatedValues;
       });
     },
-    [
-      autoSave,
-      debounceMs,
-      markAsTouched,
-      onChange,
-      validateFields,
-      validateOnChange,
-    ]
+    [debounceMs, markAsTouched, onChange, validateFields, validateOnChange]
   );
 
   const handleBlur = useCallback(
