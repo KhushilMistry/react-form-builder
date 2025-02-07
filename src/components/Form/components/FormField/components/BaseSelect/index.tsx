@@ -30,8 +30,14 @@ export const BaseSelectField: React.FC<BaseSelectFieldProps> = ({
   const {errors} = useForm<FormValues>();
   const hasError = !!errors[field.name];
 
-  const {setIsOpen, dropdownRef, isOpen, selected, selectOption, removeOption} =
-    useBaseSelect({field, isMultiselect});
+  const {
+    toggleOpen,
+    dropdownRef,
+    isOpen,
+    selected,
+    selectOption,
+    removeOption,
+  } = useBaseSelect({field, isMultiselect});
 
   return (
     <>
@@ -39,13 +45,13 @@ export const BaseSelectField: React.FC<BaseSelectFieldProps> = ({
       <div className="select-container" ref={dropdownRef}>
         <div
           className="select-box"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleOpen}
           style={errorStyles(hasError)}
         >
           {selected.length ? (
             selectedRenderer({removeOption, selected})
           ) : (
-            <span className="placeholder">Select an option</span>
+            <span className="placeholder">{"Select an option"}</span>
           )}
           <IoChevronDownOutline
             className={`chevron-icon ${isOpen ? "open" : ""}`}

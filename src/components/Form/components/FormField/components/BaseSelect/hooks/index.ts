@@ -66,5 +66,15 @@ export const useBaseSelect = ({
     [field.name, handleChange, selected]
   );
 
-  return {isOpen, dropdownRef, setIsOpen, selectOption, removeOption, selected};
+  const toggleOpen = useCallback(() => setIsOpen((prev) => !prev), []);
+
+  return {
+    isOpen,
+    dropdownRef,
+    setIsOpen,
+    selectOption,
+    removeOption,
+    selected,
+    toggleOpen,
+  };
 };
